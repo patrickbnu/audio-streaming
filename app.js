@@ -9,10 +9,13 @@ path         = require('path');
 app          = express();
 audio        = require('./lib/audio');
 
+var mongoose = require('mongoose');
+mongoose.connect('localhost', 'music');
 
-////
-///https://gist.github.com/aheckmann/2408370
-////
+
+////----------- imagem no banco -------------////
+/// https://gist.github.com/aheckmann/2408370 ///
+////-----------------------------------------////
 
 // all environments
 //app.use(express.favicon());
@@ -49,3 +52,74 @@ bs.on('connection', function (client) {
         }
     });
 });
+
+
+var schema = new Schema({
+    music: { 
+    	name : String,
+      	data: Buffer, 
+      	contentType: String 
+    }
+});
+ 
+// our model
+var Music = mongoose.model('Music', schema);
+var music;
+ 
+mongoose.connection.on('open', function () {
+    console.error('mongo is open');
+   
+    // empty the collection
+    Music.remove(function (err) {
+        if (err) throw err;     
+        console.error('removed old docs');      
+    });
+
+    store();
+ 
+});
+
+
+
+function store(){
+// store an music in binary in mongo
+    m = new Music;
+    m.music.name = "xpto";
+    m.music.data = fs.readFileSync('./audio/music.mp3');
+    m.music.contentType = 'audio/mpeg';
+    m.save(function (err, a) {
+        if (err) throw err;
+   
+        console.error('saved music to mongo');
+        
+       // server();
+
+    });
+}
+
+function server(){
+
+            // start a demo server
+        var server = express();
+        server.get('/', function (req, res) {
+            Music.findById(m, function (err, doc) {
+                if (err) return next(err);
+                res.contentType(doc.music.contentType);
+                res.send(doc.music.data);
+            });
+        });
+   
+        server.on('close', function () {
+            console.error('dropping db');
+            mongoose.connection.db.dropDatabase(function () {
+                console.error('closing db connection');
+                mongoose.connection.close();
+            });
+        });
+   
+        server.listen(3333, function (err) {});
+   
+        process.on('SIGINT', function () {
+            server.close();
+        });
+}
