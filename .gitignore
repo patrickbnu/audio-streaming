@@ -1,3 +1,4 @@
 *.swp
 videos/
+audio/
 node_modules/

@@ -4,21 +4,24 @@ var BinaryServer, express, http, path, app, audio, server, bs;
 
 BinaryServer = require('binaryjs').BinaryServer;
 express      = require('express');
+mongoose = require('mongoose');
 http         = require('http');
 path         = require('path');
 app          = express();
 audio        = require('./lib/audio');
 
-var mongoose = require('mongoose');
-mongoose.connect('localhost', 'music');
+
 
 
 ////----------- imagem no banco -------------////
 /// https://gist.github.com/aheckmann/2408370 ///
 ////-----------------------------------------////
 
+
+//   http://microjs.com/#
+
 // all environments
-//app.use(express.favicon());
+//app.use(express.favicon()); 
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -54,7 +57,13 @@ bs.on('connection', function (client) {
 });
 
 
-var schema = new Schema({
+var mongoose = require('mongoose');
+mongoose.connect('localhost', 'music');
+
+
+
+
+var schema = new mongoose.Schema({
     music: { 
     	name : String,
       	data: Buffer, 
@@ -62,6 +71,7 @@ var schema = new Schema({
     }
 });
  
+
 // our model
 var Music = mongoose.model('Music', schema);
 var music;
@@ -75,11 +85,11 @@ mongoose.connection.on('open', function () {
         console.error('removed old docs');      
     });
 
-    store();
+    //store();
  
 });
 
-
+ /*
 
 function store(){
 // store an music in binary in mongo
@@ -102,6 +112,11 @@ function server(){
             // start a demo server
         var server = express();
         server.get('/', function (req, res) {
+
+        //	Music.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
+
+        //	}
+        	
             Music.findById(m, function (err, doc) {
                 if (err) return next(err);
                 res.contentType(doc.music.contentType);
@@ -123,3 +138,4 @@ function server(){
             server.close();
         });
 }
+*/
