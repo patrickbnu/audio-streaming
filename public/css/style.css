@@ -8,7 +8,11 @@ a {
 }
 
 fieldset {
-    float: left;
+    width: 780px;
+}
+
+audio {
+    width: 780px;
 }
 
 #main {
@@ -45,7 +49,7 @@ fieldset {
 #list {
     overflow: auto;
     background: #222;
-    width: 300px;
+    width: 780px;
     height: 240px;
 }
 
@@ -54,6 +58,7 @@ fieldset {
     margin: 0;
     padding: 10px;
 }
+
 
 li:before {
     content: "•";

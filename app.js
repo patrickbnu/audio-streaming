@@ -57,7 +57,8 @@ bs.on('connection', function (client) {
 });
 
 
-var mongoose = require('mongoose');
+ 
+var mongoose = require('mongoose');/*
 mongoose.connect('localhost', 'music');
 
 
@@ -71,6 +72,7 @@ var schema = new mongoose.Schema({
     }
 });
  
+
 
 // our model
 var Music = mongoose.model('Music', schema);
@@ -88,8 +90,6 @@ mongoose.connection.on('open', function () {
     //store();
  
 });
-
- /*
 
 function store(){
 // store an music in binary in mongo

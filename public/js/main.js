@@ -16,6 +16,16 @@ $(document).ready(function () {
     client.on('stream', function (stream) {
         audio.download(stream, function (err, src) {
             $audio.attr('src', src);
+            $audio.on('ended', function(e){
+                var tags = document.getElementsByTagName('a');
+                var total = tags.length
+                var number = Math.floor(Math.random() * total) 
+
+                var tag = tags[number];
+                tag.click();
+
+
+            })
         });
     });
 
